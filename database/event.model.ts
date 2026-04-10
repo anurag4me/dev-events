@@ -106,7 +106,14 @@ const eventSchema = new Schema<IEvent>(
     location: { type: String, required: true, trim: true },
     date: { type: String, required: true, trim: true },
     time: { type: String, required: true, trim: true },
-    mode: { type: String, required: true, trim: true },
+    mode: {
+      type: String,
+      required: [true, 'Mode is required'],
+      enum: {
+        values: ['online', 'offline', 'hybrid'],
+        message: 'Mode must be either online, offline, or hybrid',
+      },
+    },
     audience: { type: String, required: true, trim: true },
     agenda: {
       type: [String],
@@ -137,9 +144,6 @@ const eventSchema = new Schema<IEvent>(
     versionKey: false,
   }
 );
-
-// Unique index to enforce URL-safe slug uniqueness at the database level.
-eventSchema.index({ slug: 1 }, { unique: true });
 
 eventSchema.pre("save", function (next) {
   try {
