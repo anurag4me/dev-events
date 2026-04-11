@@ -36,6 +36,8 @@ const EventTags = ({ tags }: { tags: string[] }) => (
 )
 
 const EventDetails = async ({ params }: { params: Promise<{slug: string}> }) => {
+  'use cache';
+  cacheLife('hours');
     const { slug } = await params;
 
     let event;
@@ -117,7 +119,7 @@ const EventDetails = async ({ params }: { params: Promise<{slug: string}> }) => 
                             <p className="text-sm">Be the first to book your spot!</p>
                         )}
 
-                        <BookEvent />
+                        <BookEvent eventId={event._id} slug={event.slug} />
                     </div>
                 </aside>
             </div>
